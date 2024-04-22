@@ -1,5 +1,8 @@
 package yuri.filgueira.yufoodapi.entities;
 
+import jakarta.persistence.*;
+import org.springframework.context.annotation.Primary;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -7,14 +10,22 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "orders")
 public class Order implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, precision = 7, scale = 2)
     private BigDecimal total;
-    private Set<OrderItem> orderItems = new HashSet<OrderItem>();
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Order() {
     }

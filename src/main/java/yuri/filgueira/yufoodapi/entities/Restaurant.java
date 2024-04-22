@@ -1,29 +1,44 @@
 package yuri.filgueira.yufoodapi.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "restaurants")
 public class Restaurant implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false, unique = true)
+    private String cnpj;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
     private Set<Address> addresses =  new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
     private Set<Food> foods = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
     private Set<Order> orders = new HashSet<>();
 
     public Restaurant() {
     }
 
-    public Restaurant(Long id, String name, Set<Address> addresses, Set<Food> foods, Set<Order> orders) {
+    public Restaurant(Long id, String name, String cnpj, Set<Address> addresses, Set<Food> foods, Set<Order> orders) {
         this.id = id;
         this.name = name;
+        this.cnpj = cnpj;
         this.addresses = addresses;
         this.foods = foods;
         this.orders = orders;
@@ -67,6 +82,14 @@ public class Restaurant implements Serializable {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
     @Override

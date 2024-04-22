@@ -1,19 +1,30 @@
 package yuri.filgueira.yufoodapi.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "order_items")
 public class OrderItem implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Food food;
+    @Column(nullable = false)
     private Integer quantity;
+    @Column(nullable = false, precision = 7, scale = 2)
     private BigDecimal subtotal;
+
+    @OneToOne
+    @JoinColumn(name = "order_item_id", nullable = false, referencedColumnName = "id")
+    private Food food;
 
     public OrderItem() {
     }
