@@ -1,6 +1,7 @@
 package yuri.filgueira.yufoodapi.entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class OrderItem implements Serializable {
     private BigDecimal subtotal;
 
     @OneToOne
-    @JoinColumn(name = "order_item_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "food_id", nullable = false, referencedColumnName = "id")
     private Food food;
 
     public OrderItem() {

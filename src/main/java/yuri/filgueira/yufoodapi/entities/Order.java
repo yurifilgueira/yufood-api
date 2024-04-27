@@ -1,7 +1,7 @@
 package yuri.filgueira.yufoodapi.entities;
 
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Primary;
+import jakarta.persistence.Entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,6 +22,12 @@ public class Order implements Serializable {
     private Long id;
     @Column(nullable = false, precision = 7, scale = 2)
     private BigDecimal total;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
+    private Restaurant restaurant;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_customer_order_id"))
+    private Customer customer;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)

@@ -1,6 +1,7 @@
 package yuri.filgueira.yufoodapi.entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -1,6 +1,7 @@
 package yuri.filgueira.yufoodapi.entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,62 +11,28 @@ import java.util.Set;
 
 @Entity
 @Table(name = "restaurants")
-public class Restaurant implements Serializable {
+public class Restaurant extends EntityObject implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id
-    private Long id;
-    @Column(nullable = false)
-    private String name;
     @Column(nullable = false, unique = true)
     private String cnpj;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
-    private Set<Address> addresses =  new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Set<Food> foods = new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,  mappedBy = "restaurant")
     private Set<Order> orders = new HashSet<>();
 
     public Restaurant() {
     }
 
-    public Restaurant(Long id, String name, String cnpj, Set<Address> addresses, Set<Food> foods, Set<Order> orders) {
-        this.id = id;
-        this.name = name;
+    public Restaurant(Long id, String name, String email, Set<Address> addresses, String cnpj, Set<Food> foods, Set<Order> orders) {
+        super(id, name, email, addresses);
         this.cnpj = cnpj;
-        this.addresses = addresses;
         this.foods = foods;
         this.orders = orders;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Set<Address> addresses) {
-        this.addresses = addresses;
     }
 
     public Set<Food> getFoods() {
