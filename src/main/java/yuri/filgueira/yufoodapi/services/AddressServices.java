@@ -1,11 +1,13 @@
 package yuri.filgueira.yufoodapi.services;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.entities.Address;
 import yuri.filgueira.yufoodapi.repositories.AddressRepository;
 
 import java.util.List;
 
+@Service
 public class AddressServices {
 
     private AddressRepository repository;

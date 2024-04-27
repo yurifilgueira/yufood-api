@@ -1,11 +1,13 @@
 package yuri.filgueira.yufoodapi.services;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.entities.Restaurant;
 import yuri.filgueira.yufoodapi.repositories.RestaurantRepository;
 
 import java.util.List;
 
+@Service
 public class RestaurantServices {
 
     private RestaurantRepository repository;
