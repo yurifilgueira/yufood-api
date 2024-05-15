@@ -15,29 +15,29 @@ public class AddressController {
     @Autowired
     private AddressServices services;
 
-    @GetMapping
-    public ResponseEntity<List<Address>> findAll() {
-        return services.findAll();
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<List<Address>> findAll(@PathVariable("userId") Long userId) {
+        return services.findAll(userId);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Address> findById(@PathVariable("id") Long id) {
-        return services.findById(id);
+    @GetMapping(value = "/{userId}/{addressId}")
+    public ResponseEntity<Address> findById(@PathVariable("userId") Long userId, @PathVariable("addressId") Long addressId) {
+        return services.findById(userId, addressId);
     }
 
-    @PostMapping
-    public ResponseEntity<Address> create(@RequestBody Address address) {
-        return services.create(address);
+    @PostMapping(value = "/{userId}")
+    public ResponseEntity<Address> create(@PathVariable("userId") Long userId, @RequestBody Address address) {
+        return services.create(userId, address);
     }
 
-    @PutMapping
-    public ResponseEntity<Address> update(@RequestBody Address address) {
-        return services.update(address);
+    @PutMapping(value = "/{userId}")
+    public ResponseEntity<Address> update(@PathVariable("userId") Long userId, @RequestBody Address address) {
+        return services.update(userId, address);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-        return services.delete(id);
+    @DeleteMapping(value = "/{userId}/{addressId}")
+    public ResponseEntity<Void> delete(@PathVariable("userId") Long userId, @PathVariable("addressId") Long addressId) {
+        return services.delete(userId, addressId);
     }
 
 }

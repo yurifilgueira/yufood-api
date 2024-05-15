@@ -25,7 +25,7 @@ public class CustomerController {
         return services.findById(id);
     }
 
-    @PostMapping(value = "/{id}")
+    @PostMapping
     public ResponseEntity<Customer> create(@RequestBody Customer customer) {
         return services.create(customer);
     }
@@ -39,5 +39,4 @@ public class CustomerController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         return services.delete(id);
     }
-
 }

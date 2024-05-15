@@ -9,35 +9,34 @@ import yuri.filgueira.yufoodapi.services.FoodServices;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "v1/api/foods")
+@RequestMapping(value = "v1/api/restaurants/{restaurantId}/foods")
 public class FoodController {
 
     @Autowired
-    private FoodServices services;
+    FoodServices foodServices;
 
     @GetMapping
-    public ResponseEntity<List<Food>> findAll(){
-        return services.findAll();
+    public ResponseEntity<List<Food>> findAllOrderItems(@PathVariable("restaurantId") Long restaurantId) {
+        return foodServices.findAll(restaurantId);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Food> findById(@PathVariable("id") Long id){
-        return services.findById(id);
+    @GetMapping(value = "/{foodId}")
+    public ResponseEntity<Food> findOrderItemById(@PathVariable("restaurantId") Long restaurantId, @PathVariable("foodId") Long foodId) {
+        return foodServices.findById(restaurantId, foodId);
     }
 
     @PostMapping
-    public ResponseEntity<Food> create(@RequestBody Food food){
-        return services.create(food);
+    public ResponseEntity<Food> createOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody Food food) {
+        return foodServices.create(restaurantId, food);
     }
 
     @PutMapping
-    public ResponseEntity<Food> update(@RequestBody Food food){
-        return services.update(food);
+    public ResponseEntity<Food> updateOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody Food food) {
+        return foodServices.update(restaurantId, food);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        return services.delete(id);
+    @DeleteMapping(value = "/{foodId}")
+    public ResponseEntity<Void> delete(@PathVariable("restaurantId") Long restaurantId, @PathVariable Long  foodId) {
+        return foodServices.delete(restaurantId, foodId);
     }
-
 }

@@ -1,19 +1,30 @@
 package yuri.filgueira.yufoodapi.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.entities.OrderItem;
 import yuri.filgueira.yufoodapi.repositories.OrderItemRepository;
+import yuri.filgueira.yufoodapi.repositories.OrderRepository;
 
 import java.util.List;
 
 @Service
 public class OrderItemServices {
 
-    private OrderItemRepository repository;
+    private static final Logger logger = LoggerFactory.getLogger(OrderItemServices.class);
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
-    public ResponseEntity<List<OrderItem>> findAll(){
-        List<OrderItem> items = repository.findAll();
+    public ResponseEntity<List<OrderItem>> findAll(Long orderId){
+        
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"));
+        
+        List<OrderItem> items = order.getOrderItems().stream().toList();
         if(items.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -21,36 +32,59 @@ public class OrderItemServices {
         return ResponseEntity.ok(items);
     }
 
-    public ResponseEntity<OrderItem> findById(Long id){
-        var orderItem = repository.findById(id).orElseThrow(()-> new RuntimeException("Resource not found"));
-
-        return ResponseEntity.ok(orderItem);
-
-    }
-
-    public ResponseEntity<OrderItem> create(OrderItem item){
-        var orderItem = repository.save(item);
+    public ResponseEntity<OrderItem> findById(Long orderId, Long orderItemId){
+        var orderItem = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"))
+                .getOrderItems().stream().filter(item -> item.getId().equals(orderItemId)).findFirst().orElseThrow(() -> new RuntimeException("Resource not found"));
 
         return ResponseEntity.ok(orderItem);
     }
 
-    public ResponseEntity<OrderItem> update(OrderItem orderItem){
+    public ResponseEntity<OrderItem> create(Long orderId, OrderItem item){
 
-        var entity = repository.findById(orderItem.getId()).orElseThrow(()-> new RuntimeException("Resource not found"));
+        logger.info("Finding order");
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        order.getOrderItems().add(item);
+        orderRepository.save(order);
+
+        var orderItem = orderItemRepository.save(item);
+        orderItemRepository.save(orderItem);
+
+        return ResponseEntity.ok(orderItem);
+    }
+
+    public ResponseEntity<OrderItem> update(Long orderId, OrderItem orderItem){
+
+        var order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        var entity = orderItemRepository.findById(orderItem.getId())
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
 
         entity.setFood(orderItem.getFood());
         entity.setQuantity(orderItem.getQuantity());
         entity.setSubtotal(orderItem.getSubtotal());
 
-        return ResponseEntity.ok(repository.save(entity));
+        order.getOrderItems().add(entity);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok(orderItemRepository.save(entity));
 
     }
 
-    public ResponseEntity<Void> delete(Long id){
-        repository.deleteById(id);
+    public ResponseEntity<Void> delete(Long orderId, Long orderItemId){
+
+        var order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        var entity = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        order.getOrderItems().remove(entity);
+        orderRepository.save(order);
+
+        orderItemRepository.deleteById(orderItemId);
 
         return ResponseEntity.noContent().build();
     }
-
-
 }

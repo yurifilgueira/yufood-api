@@ -1,7 +1,8 @@
 package yuri.filgueira.yufoodapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import jakarta.persistence.Entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,9 +23,15 @@ public class Order implements Serializable {
     private Long id;
     @Column(nullable = false, precision = 7, scale = 2)
     private BigDecimal total;
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false,  foreignKey = @ForeignKey(name = "fk_restaurant_order_id"))
     private Restaurant restaurant;
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_customer_order_id"))
     private Customer customer;
@@ -64,6 +71,22 @@ public class Order implements Serializable {
 
     public void setOrderItems(Set<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     @Override

@@ -1,16 +1,17 @@
 package yuri.filgueira.yufoodapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import jakarta.persistence.Entity;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "restaurants")
+@PrimaryKeyJoinColumn(name = "id")
 public class Restaurant extends EntityObject implements Serializable {
 
     @Serial
@@ -22,7 +23,10 @@ public class Restaurant extends EntityObject implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Set<Food> foods = new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,  mappedBy = "restaurant")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @OneToMany(mappedBy = "restaurant")
     private Set<Order> orders = new HashSet<>();
 
     public Restaurant() {
@@ -59,15 +63,11 @@ public class Restaurant extends EntityObject implements Serializable {
         this.cnpj = cnpj;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Restaurant that)) return false;
-        return Objects.equals(getId(), that.getId());
+    public void addOrder(Order item) {
+        orders.add(item);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
+    public void removeOrder(Order order) {
+        orders.remove(order);
     }
 }

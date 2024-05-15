@@ -1,16 +1,21 @@
 package yuri.filgueira.yufoodapi.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.entities.Customer;
 import yuri.filgueira.yufoodapi.repositories.CustomerRepository;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class CustomerServices {
 
+    @Autowired
     private CustomerRepository repository;
+
+    private Logger logger = Logger.getLogger(CustomerServices.class.getName());
 
     public ResponseEntity<List<Customer>> findAll(){
         List<Customer> items = repository.findAll();
@@ -29,6 +34,9 @@ public class CustomerServices {
     }
 
     public ResponseEntity<Customer> create(Customer item){
+
+        logger.info("Creating customer...");
+
         var customer = repository.save(item);
 
         return ResponseEntity.ok(customer);

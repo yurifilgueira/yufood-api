@@ -13,31 +13,30 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    private OrderServices services;
+    private OrderServices orderServices;
 
     @GetMapping
-    public ResponseEntity<List<Order>> findAll() {
-        return services.findAll();
+    public ResponseEntity<List<Order>> findAll(Long orderId) {
+        return orderServices.findAll();
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Order> findById(@PathVariable("id") Long id) {
-        return services.findById(id);
+        return orderServices.findById(id);
     }
 
     @PostMapping
     public ResponseEntity<Order> create(@RequestBody Order order) {
-        return services.create(order);
+        return this.orderServices.create(order);
     }
 
     @PutMapping
     public ResponseEntity<Order> update(@RequestBody Order order) {
-        return services.create(order);
+        return this.orderServices.update(order);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> delete(Long id) {
-        return services.delete(id);
+        return orderServices.delete(id);
     }
-
 }

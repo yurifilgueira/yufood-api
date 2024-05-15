@@ -1,5 +1,6 @@
 package yuri.filgueira.yufoodapi.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.entities.Restaurant;
@@ -10,6 +11,7 @@ import java.util.List;
 @Service
 public class RestaurantServices {
 
+    @Autowired
     private RestaurantRepository repository;
 
     public ResponseEntity<List<Restaurant>> findAll(){
@@ -41,12 +43,14 @@ public class RestaurantServices {
         entity.setEmail(restaurant.getEmail());
         entity.setName(restaurant.getName());
         entity.setCnpj(restaurant.getCnpj());
-        entity.setFoods(restaurant.getFoods());
-        entity.setOrders(restaurant.getOrders());
-        entity.setAddresses(restaurant.getAddresses());
+
+        entity.getFoods().addAll(restaurant.getFoods());
+        entity.getOrders().clear();
+        entity.getOrders().addAll(restaurant.getOrders());
+        entity.getAddresses().clear();
+        entity.getAddresses().addAll(restaurant.getAddresses());
 
         return ResponseEntity.ok(repository.save(entity));
-
     }
 
     public ResponseEntity<Void> delete(Long id){
@@ -54,6 +58,4 @@ public class RestaurantServices {
 
         return ResponseEntity.noContent().build();
     }
-
-
 }

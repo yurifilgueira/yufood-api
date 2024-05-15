@@ -24,7 +24,7 @@ public class OrderItem implements Serializable {
     private BigDecimal subtotal;
 
     @OneToOne
-    @JoinColumn(name = "food_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "food_id", nullable = false, referencedColumnName = "id", unique = false)
     private Food food;
 
     public OrderItem() {

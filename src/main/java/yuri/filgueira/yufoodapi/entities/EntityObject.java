@@ -9,15 +9,14 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class EntityObject implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    @TableGenerator(name = "entities_id_table_generator", table = "entities", pkColumnName = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
     @Column(nullable = false, length = 80)
     protected String name;
@@ -68,6 +67,14 @@ public abstract class EntityObject implements Serializable {
 
     public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    public void addAddress(Address address) {
+        addresses.add(address);
+    }
+
+    public void removeAddress(Address address) {
+        addresses.remove(address);
     }
 
     @Override

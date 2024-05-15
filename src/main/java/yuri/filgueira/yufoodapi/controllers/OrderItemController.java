@@ -3,40 +3,40 @@ package yuri.filgueira.yufoodapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuri.filgueira.yufoodapi.entities.OrderItem;
 import yuri.filgueira.yufoodapi.services.OrderItemServices;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "v1/api/order-items")
+@RequestMapping(value = "orders/{orderId}/order-items")
 public class OrderItemController {
 
     @Autowired
-    private OrderItemServices services;
+    OrderItemServices orderItemServices;
 
     @GetMapping
-    public ResponseEntity<List<OrderItem>> findAll(Long orderId){
-        return services.findAll();
+    public ResponseEntity<List<yuri.filgueira.yufoodapi.entities.OrderItem>> findAllOrderItems(@PathVariable("orderId") Long orderId) {
+        return orderItemServices.findAll(orderId);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<OrderItem> findById(@PathVariable("id") Long id){
-        return services.findById(id);
+    @GetMapping(value = "/{orderItemId}")
+    public ResponseEntity<yuri.filgueira.yufoodapi.entities.OrderItem> findOrderItemById(@PathVariable("orderId") Long orderId, @PathVariable("orderItemId") Long orderItemId) {
+        return orderItemServices.findById(orderId, orderItemId);
     }
 
     @PostMapping
-    public ResponseEntity<OrderItem> create(@RequestBody OrderItem item){
-        return services.create(item);
+    public ResponseEntity<yuri.filgueira.yufoodapi.entities.OrderItem> createOrderItem(@PathVariable("orderId") Long orderId, @RequestBody yuri.filgueira.yufoodapi.entities.OrderItem orderItem) {
+        return orderItemServices.create(orderId, orderItem);
     }
 
     @PutMapping
-    public ResponseEntity<OrderItem> update(@RequestBody OrderItem item){
-        return services.update(item);
+    public ResponseEntity<yuri.filgueira.yufoodapi.entities.OrderItem> updateOrderItem(@PathVariable("orderId") Long orderId, @RequestBody yuri.filgueira.yufoodapi.entities.OrderItem orderItem) {
+        return orderItemServices.update(orderId, orderItem);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        return services.delete(id);
+    @DeleteMapping(value = "/{orderItemId}")
+    public ResponseEntity<Void> delete(@PathVariable("orderId") Long orderId, @PathVariable Long  orderItemId) {
+        return orderItemServices.delete(orderId, orderItemId);
     }
+
 }
