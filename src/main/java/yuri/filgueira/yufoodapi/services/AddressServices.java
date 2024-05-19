@@ -24,10 +24,8 @@ public class AddressServices {
     }
 
     public ResponseEntity<Address> findById(Long userId, Long addressId){
-        var address = repository.findById(userId).orElseThrow(()-> new RuntimeException("Resource not found"));
-
+        var address = repository.findById(addressId).orElseThrow(()-> new RuntimeException("Resource not found"));
         return ResponseEntity.ok(address);
-
     }
 
     public ResponseEntity<Address> create(Long userId, Address item){

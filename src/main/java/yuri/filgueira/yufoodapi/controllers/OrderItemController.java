@@ -3,34 +3,36 @@ package yuri.filgueira.yufoodapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import yuri.filgueira.yufoodapi.entities.OrderItem;
 import yuri.filgueira.yufoodapi.services.OrderItemServices;
+import yuri.filgueira.yufoodapi.data.vo.OrderItemVO;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "orders/{orderId}/order-items")
+@RequestMapping(value = "v1/api/orders/{orderId}/order-items")
 public class OrderItemController {
 
     @Autowired
     OrderItemServices orderItemServices;
 
     @GetMapping
-    public ResponseEntity<List<yuri.filgueira.yufoodapi.entities.OrderItem>> findAllOrderItems(@PathVariable("orderId") Long orderId) {
+    public ResponseEntity<List<OrderItem>> findAllOrderItems(@PathVariable("orderId") Long orderId) {
         return orderItemServices.findAll(orderId);
     }
 
     @GetMapping(value = "/{orderItemId}")
-    public ResponseEntity<yuri.filgueira.yufoodapi.entities.OrderItem> findOrderItemById(@PathVariable("orderId") Long orderId, @PathVariable("orderItemId") Long orderItemId) {
+    public ResponseEntity<OrderItemVO> findOrderItemById(@PathVariable("orderId") Long orderId, @PathVariable("orderItemId") Long orderItemId) {
         return orderItemServices.findById(orderId, orderItemId);
     }
 
     @PostMapping
-    public ResponseEntity<yuri.filgueira.yufoodapi.entities.OrderItem> createOrderItem(@PathVariable("orderId") Long orderId, @RequestBody yuri.filgueira.yufoodapi.entities.OrderItem orderItem) {
+    public ResponseEntity<OrderItem> createOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItem orderItem) {
         return orderItemServices.create(orderId, orderItem);
     }
 
     @PutMapping
-    public ResponseEntity<yuri.filgueira.yufoodapi.entities.OrderItem> updateOrderItem(@PathVariable("orderId") Long orderId, @RequestBody yuri.filgueira.yufoodapi.entities.OrderItem orderItem) {
+    public ResponseEntity<OrderItem> updateOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItem orderItem) {
         return orderItemServices.update(orderId, orderItem);
     }
 

@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.entities.OrderItem;
+import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.OrderItemRepository;
 import yuri.filgueira.yufoodapi.repositories.OrderRepository;
+import yuri.filgueira.yufoodapi.data.vo.OrderItemVO;
 
 import java.util.List;
 
@@ -32,11 +34,14 @@ public class OrderItemServices {
         return ResponseEntity.ok(items);
     }
 
-    public ResponseEntity<OrderItem> findById(Long orderId, Long orderItemId){
+    public ResponseEntity<OrderItemVO> findById(Long orderId, Long orderItemId){
+
         var orderItem = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"))
                 .getOrderItems().stream().filter(item -> item.getId().equals(orderItemId)).findFirst().orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        return ResponseEntity.ok(orderItem);
+        var orderItemVO = MyModelMapper.convertValue(orderItem, OrderItemVO.class);
+
+        return ResponseEntity.ok(orderItemVO);
     }
 
     public ResponseEntity<OrderItem> create(Long orderId, OrderItem item){
