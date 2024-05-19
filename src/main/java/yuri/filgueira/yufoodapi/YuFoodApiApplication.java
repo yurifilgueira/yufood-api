@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class YufoodApiApplication {
+public class YuFoodApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(YufoodApiApplication.class, args);
+		SpringApplication.run(YuFoodApiApplication.class, args);
 	}
 
 }
