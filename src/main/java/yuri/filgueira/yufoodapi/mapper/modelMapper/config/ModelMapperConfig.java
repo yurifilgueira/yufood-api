@@ -3,14 +3,8 @@ package yuri.filgueira.yufoodapi.mapper.modelMapper.config;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import yuri.filgueira.yufoodapi.data.vo.AddressVO;
-import yuri.filgueira.yufoodapi.data.vo.EntityObjectVO;
-import yuri.filgueira.yufoodapi.data.vo.FoodVO;
-import yuri.filgueira.yufoodapi.data.vo.OrderItemVO;
-import yuri.filgueira.yufoodapi.entities.Address;
-import yuri.filgueira.yufoodapi.entities.EntityObject;
-import yuri.filgueira.yufoodapi.entities.Food;
-import yuri.filgueira.yufoodapi.entities.OrderItem;
+import yuri.filgueira.yufoodapi.data.vo.*;
+import yuri.filgueira.yufoodapi.entities.*;
 
 @Configuration
 public class ModelMapperConfig {
@@ -37,11 +31,23 @@ public class ModelMapperConfig {
         modelMapper.createTypeMap(AddressVO.class, Address.class)
                 .addMapping(AddressVO::getKey, Address::setId);
 
+        modelMapper.createTypeMap(Order.class, OrderVO.class)
+                .addMapping(Order::getId, OrderVO::setKey);
+
+        modelMapper.createTypeMap(OrderVO.class, Order.class)
+                .addMapping(OrderVO::getKey, Order::setId);
+
         modelMapper.createTypeMap(EntityObject.class, EntityObjectVO.class)
                 .addMapping(EntityObject::getId, EntityObjectVO::setKey);
 
         modelMapper.createTypeMap(EntityObjectVO.class, EntityObject.class)
                 .addMapping(EntityObjectVO::getKey, EntityObject::setId);
+
+        modelMapper.createTypeMap(Restaurant.class, RestaurantVO.class)
+                .addMapping(Restaurant::getId, RestaurantVO::setKey);
+
+        modelMapper.createTypeMap(RestaurantVO.class, Restaurant.class)
+                .addMapping(RestaurantVO::getKey, Restaurant::setId);
 
         return modelMapper;
     }
