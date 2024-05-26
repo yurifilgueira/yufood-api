@@ -31,10 +31,10 @@ public class MockFood {
     public List<Food> mockEntityList() {
         List<Food> entities = new ArrayList<>();
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             Food entity = mockEntity(i);
-            entity.setPrice(new BigDecimal(20 * i));
-            entity.setName("Name" + i);
+            entity.setName("Name: " + i);
+            entity.setPrice(new BigDecimal(20 + i));
 
             entities.add(entity);
         }
@@ -46,10 +46,10 @@ public class MockFood {
     public List<FoodVO> mockVOList() {
         List<FoodVO> vos = new ArrayList<>();
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             FoodVO vo = mockVO(i);
-            vo.setPrice(new BigDecimal(20 * i));
-            vo.setName("Name" + i);
+            vo.setName("Name: " + i);
+            vo.setPrice(new BigDecimal(20 + i));
 
             vos.add(vo);
         }

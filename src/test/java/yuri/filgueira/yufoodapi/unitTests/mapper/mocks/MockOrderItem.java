@@ -41,7 +41,7 @@ public class MockOrderItem {
     public List<OrderItem> mockEntityList() {
         List<OrderItem> entities = new ArrayList<>();
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             OrderItem entity = mockEntity(i);
             entity.setId((long) (i + 1));
 
@@ -60,7 +60,7 @@ public class MockOrderItem {
     public List<OrderItemVO> mockVoList() {
         List<OrderItemVO> vos = new ArrayList<>();
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             OrderItemVO vo = mockVO(i);
             vo.setKey((long) (i + 1));
 
