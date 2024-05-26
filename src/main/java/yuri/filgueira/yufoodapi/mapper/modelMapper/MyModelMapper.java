@@ -24,5 +24,4 @@ public class MyModelMapper {
         origins.stream().map(origin -> convertValue(origin, destination)).forEach(destinations::add);
         return destinations;
     }
-
 }

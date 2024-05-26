@@ -18,8 +18,6 @@ public class MockOrderItem {
         orderItem.setFood(mockFood.mockEntity(key + 1));
         orderItem.setQuantity(3);
 
-        BigDecimal subtotal = getSubtotal(orderItem);
-
         orderItem.setSubtotal(new BigDecimal("71.70"));
 
         return orderItem;
@@ -31,8 +29,6 @@ public class MockOrderItem {
         vo.setFood(mockFood.mockVO(key + 1));
         vo.setQuantity(3);
 
-        BigDecimal subtotal = getSubtotal(vo);
-
         vo.setSubtotal(new BigDecimal("71.70"));
 
         return vo;
@@ -43,13 +39,15 @@ public class MockOrderItem {
 
         for (int i = 0; i < 10; i++) {
             OrderItem entity = mockEntity(i);
-            entity.setId((long) (i + 1));
 
-            entity.setFood(mockFood.mockEntity((i)));
-            entity.getFood().setName(("Name: " + i));
-            entity.getFood().setPrice(new BigDecimal(20 * i));
+            entity.setFood(mockFood.mockEntity((i + 1)));
+            entity.getFood().setName(("Name: " + (i + 1)));
+            entity.getFood().setPrice(new BigDecimal(20 + i));
 
             entity.setQuantity(1 + i);
+            entity.setSubtotal(getSubtotal(entity));
+
+            entities.add(entity);
         }
 
         return entities;
@@ -62,13 +60,15 @@ public class MockOrderItem {
 
         for (int i = 0; i < 10; i++) {
             OrderItemVO vo = mockVO(i);
-            vo.setKey((long) (i + 1));
 
-            vo.setFood(mockFood.mockVO((i)));
-            vo.getFood().setName(("Name: " + i));
-            vo.getFood().setPrice(new BigDecimal(20 * i));
+            vo.setFood(mockFood.mockVO((i + 1)));
+            vo.getFood().setName(("Name: " + (i + 1)));
+            vo.getFood().setPrice(new BigDecimal(20 + i));
 
             vo.setQuantity(1 + i);
+            vo.setSubtotal(getSubtotal(vo));
+
+            vos.add(vo);
         }
 
         return vos;

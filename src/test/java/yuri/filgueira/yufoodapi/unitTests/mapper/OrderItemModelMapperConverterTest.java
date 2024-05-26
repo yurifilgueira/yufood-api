@@ -10,8 +10,7 @@ import yuri.filgueira.yufoodapi.unitTests.mapper.mocks.MockOrderItem;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderItemModelMapperConverterTest {
 
@@ -58,4 +57,51 @@ public class OrderItemModelMapperConverterTest {
         assertEquals(3, output.getQuantity());
         assertEquals(new BigDecimal("71.70"), output.getSubtotal());
     }
+
+    @Test
+    public void parseEntityListToVoListTest(){
+
+        var entities = input.mockEntityList();
+        var output = mapper.convertList(entities, OrderItemVO.class);
+
+        assertNotNull(output);
+        assertNotNull(output.get(2));
+        assertNotNull(output.get(6));
+        assertNotNull(output.get(9));
+
+        assertEquals(2L, output.get(2).getKey());
+        assertEquals(FoodVO.class.getName(), output.get(2).getFood().getClass().getName());
+        assertNotNull(output.get(2).getFood());
+        assertEquals(3L, output.get(2).getFood().getKey());
+        assertEquals("Name: 3", output.get(2).getFood().getName());
+        assertEquals(new BigDecimal("22"), output.get(2).getFood().getPrice());
+
+        assertEquals(3, output.get(2).getQuantity());
+        assertEquals(new BigDecimal("66"), output.get(2).getSubtotal());
+
+    }
+
+    @Test
+    public void parseVoListToEntityList(){
+
+        var vos = input.mockVoList();
+        var output = mapper.convertList(vos, OrderItem.class);
+
+        assertNotNull(output);
+        assertNotNull(output.get(2));
+        assertNotNull(output.get(6));
+        assertNotNull(output.get(9));
+
+        assertEquals(2L, output.get(2).getId());
+        assertEquals(Food.class.getName(), output.get(2).getFood().getClass().getName());
+        assertNotNull(output.get(2).getFood());
+        assertEquals(3L, output.get(2).getFood().getId());
+        assertEquals("Name: 3", output.get(2).getFood().getName());
+        assertEquals(new BigDecimal("22"), output.get(2).getFood().getPrice());
+
+        assertEquals(3, output.get(2).getQuantity());
+        assertEquals(new BigDecimal("66"), output.get(2).getSubtotal());
+
+    }
+
 }
