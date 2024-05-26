@@ -21,6 +21,8 @@ public class OrderItemServices {
     private OrderRepository orderRepository;
     @Autowired
     private OrderItemRepository orderItemRepository;
+    @Autowired
+    private MyModelMapper mapper;
 
     public ResponseEntity<List<OrderItem>> findAll(Long orderId){
         
@@ -39,7 +41,7 @@ public class OrderItemServices {
         var orderItem = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"))
                 .getOrderItems().stream().filter(item -> item.getId().equals(orderItemId)).findFirst().orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        var orderItemVO = MyModelMapper.convertValue(orderItem, OrderItemVO.class);
+        var orderItemVO = mapper.convertValue(orderItem, OrderItemVO.class);
 
         return ResponseEntity.ok(orderItemVO);
     }

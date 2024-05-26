@@ -10,14 +10,14 @@ import java.util.List;
 @Service
 public class MyModelMapper {
 
-    private static final ModelMapper modelMapper = new ModelMapperConfig().modelMapper();
+    private final ModelMapper modelMapper = new ModelMapperConfig().modelMapper();
 
-    public static <O, D> D convertValue(O origin, Class<D> destination) {
+    public <O, D> D convertValue(O origin, Class<D> destination) {
 
         return modelMapper.map(origin, destination);
     }
 
-    public static <O, D> List<D> convertList(List<O> origins, Class<D> destination) {
+    public <O, D> List<D> convertList(List<O> origins, Class<D> destination) {
 
         List<D> destinations = new ArrayList<>();
 

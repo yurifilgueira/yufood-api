@@ -2,11 +2,11 @@ package yuri.filgueira.yufoodapi.data.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import yuri.filgueira.yufoodapi.entities.Food;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @JsonPropertyOrder(value = {"id", "quantity", "subtotal", "food"})
 public class OrderItemVO implements Serializable {
@@ -19,12 +19,12 @@ public class OrderItemVO implements Serializable {
     private Integer quantity;
     private BigDecimal subtotal;
 
-    private Food food;
+    private FoodVO food;
 
     public OrderItemVO() {
     }
 
-    public OrderItemVO(Long key, Integer quantity, BigDecimal subtotal, Food food) {
+    public OrderItemVO(Long key, Integer quantity, BigDecimal subtotal, FoodVO food) {
         this.key = key;
         this.quantity = quantity;
         this.subtotal = subtotal;
@@ -55,11 +55,23 @@ public class OrderItemVO implements Serializable {
         this.subtotal = subtotal;
     }
 
-    public Food getFood() {
+    public FoodVO getFood() {
         return food;
     }
 
-    public void setFood(Food food) {
+    public void setFood(FoodVO food) {
         this.food = food;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderItemVO vo)) return false;
+        return Objects.equals(getKey(), vo.getKey());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getKey());
     }
 }
