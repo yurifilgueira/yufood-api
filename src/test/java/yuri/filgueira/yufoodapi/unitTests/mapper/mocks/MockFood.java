@@ -10,6 +10,10 @@ import java.util.List;
 
 public class MockFood {
 
+    public static MockFood getMockFood(){
+        return MockFoodHolder.INSTANCE;
+    }
+
     public Food mockEntity(long id) {
         Food entity = new Food();
         entity.setId(id);
@@ -55,5 +59,9 @@ public class MockFood {
         }
 
         return vos;
+    }
+
+    private static class MockFoodHolder {
+        public final static MockFood INSTANCE = new MockFood();
     }
 }

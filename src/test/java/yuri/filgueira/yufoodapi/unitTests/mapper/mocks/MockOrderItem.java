@@ -10,6 +10,10 @@ import java.util.List;
 
 public class MockOrderItem {
 
+    public static MockOrderItem getMockOrderItem(){
+        return MockOrderItemHolder.INSTANCE;
+    }
+
     private MockFood mockFood = new MockFood();
 
     public OrderItem mockEntity(long key) {
@@ -91,5 +95,9 @@ public class MockOrderItem {
         }
 
         return subtotal;
+    }
+
+    private static class MockOrderItemHolder {
+        public final static MockOrderItem INSTANCE = new MockOrderItem();
     }
 }

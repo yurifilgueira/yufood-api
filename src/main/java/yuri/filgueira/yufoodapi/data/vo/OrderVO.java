@@ -1,8 +1,5 @@
 package yuri.filgueira.yufoodapi.data.vo;
 
-import yuri.filgueira.yufoodapi.entities.Customer;
-import yuri.filgueira.yufoodapi.entities.Restaurant;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,15 +14,15 @@ public class OrderVO implements Serializable {
 
     private Long key;
     private BigDecimal total;
-    private Restaurant restaurant;
-    private Customer customer;
+    private RestaurantVO restaurant;
+    private CustomerVO customer;
 
     private Set<OrderItemVO> orderItems = new HashSet<>();
 
     public OrderVO() {
     }
 
-    public OrderVO(Long key, BigDecimal total, Restaurant restaurant, Customer customer, Set<OrderItemVO> orderItems) {
+    public OrderVO(Long key, BigDecimal total, RestaurantVO restaurant, CustomerVO customer, Set<OrderItemVO> orderItems) {
         this.key = key;
         this.total = total;
         this.restaurant = restaurant;
@@ -57,19 +54,19 @@ public class OrderVO implements Serializable {
         this.orderItems = orderItems;
     }
 
-    public Restaurant getRestaurant() {
+    public RestaurantVO getRestaurant() {
         return restaurant;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
+    public void setRestaurant(RestaurantVO restaurant) {
         this.restaurant = restaurant;
     }
 
-    public Customer getCustomer() {
+    public CustomerVO getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerVO customer) {
         this.customer = customer;
     }
 

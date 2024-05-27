@@ -18,26 +18,10 @@ public class RestaurantVO extends EntityObjectVO implements Serializable {
     public RestaurantVO() {
     }
 
-    public RestaurantVO(Long id, String name, String email, Set<AddressVO> addresses, String cnpj, Set<FoodVO> foods, Set<OrderVO> orders) {
-        super(id, name, email, addresses);
+    public RestaurantVO(Long key, String name, String email, Set<AddressVO> addresses, String cnpj, Set<FoodVO> foods, Set<OrderVO> orders) {
+        super(key, name, email, addresses);
         this.cnpj = cnpj;
         this.foods = foods;
-        this.orders = orders;
-    }
-
-    public Set<FoodVO> getFoodVOs() {
-        return foods;
-    }
-
-    public void setFoodVOs(Set<FoodVO> foods) {
-        this.foods = foods;
-    }
-
-    public Set<OrderVO> getOrderVOs() {
-        return orders;
-    }
-
-    public void setOrderVOs(Set<OrderVO> orders) {
         this.orders = orders;
     }
 
@@ -49,11 +33,19 @@ public class RestaurantVO extends EntityObjectVO implements Serializable {
         this.cnpj = cnpj;
     }
 
-    public void addOrderVO(OrderVO item) {
-        orders.add(item);
+    public Set<FoodVO> getFoods() {
+        return foods;
     }
 
-    public void removeOrderVO(OrderVO order) {
-        orders.remove(order);
+    public void setFoods(Set<FoodVO> foods) {
+        this.foods = foods;
+    }
+
+    public Set<OrderVO> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<OrderVO> orders) {
+        this.orders = orders;
     }
 }

@@ -101,7 +101,6 @@ public class OrderItemModelMapperConverterTest {
 
         assertEquals(3, output.get(2).getQuantity());
         assertEquals(new BigDecimal("66"), output.get(2).getSubtotal());
-
     }
 
 }

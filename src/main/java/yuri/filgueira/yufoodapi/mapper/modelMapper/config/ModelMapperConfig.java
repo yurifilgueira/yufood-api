@@ -31,12 +31,6 @@ public class ModelMapperConfig {
         modelMapper.createTypeMap(AddressVO.class, Address.class)
                 .addMapping(AddressVO::getKey, Address::setId);
 
-        modelMapper.createTypeMap(Order.class, OrderVO.class)
-                .addMapping(Order::getId, OrderVO::setKey);
-
-        modelMapper.createTypeMap(OrderVO.class, Order.class)
-                .addMapping(OrderVO::getKey, Order::setId);
-
         modelMapper.createTypeMap(EntityObject.class, EntityObjectVO.class)
                 .addMapping(EntityObject::getId, EntityObjectVO::setKey);
 
@@ -49,6 +43,17 @@ public class ModelMapperConfig {
         modelMapper.createTypeMap(RestaurantVO.class, Restaurant.class)
                 .addMapping(RestaurantVO::getKey, Restaurant::setId);
 
+        modelMapper.createTypeMap(Customer.class, CustomerVO.class)
+                .addMapping(Customer::getId, CustomerVO::setKey);
+
+        modelMapper.createTypeMap(CustomerVO.class, Customer.class)
+                .addMapping(CustomerVO::getKey, Customer::setId);
+
+        modelMapper.createTypeMap(Order.class, OrderVO.class)
+                .addMapping(Order::getId, OrderVO::setKey);
+
+        modelMapper.createTypeMap(OrderVO.class, Order.class)
+                .addMapping(OrderVO::getKey, Order::setId);
         return modelMapper;
     }
 }
