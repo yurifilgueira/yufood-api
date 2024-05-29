@@ -3,7 +3,6 @@ package yuri.filgueira.yufoodapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuri.filgueira.yufoodapi.entities.OrderItem;
 import yuri.filgueira.yufoodapi.services.OrderItemServices;
 import yuri.filgueira.yufoodapi.data.vo.OrderItemVO;
 
@@ -17,7 +16,7 @@ public class OrderItemController {
     OrderItemServices orderItemServices;
 
     @GetMapping
-    public ResponseEntity<List<OrderItem>> findAllOrderItems(@PathVariable("orderId") Long orderId) {
+    public ResponseEntity<List<OrderItemVO>> findAllOrderItems(@PathVariable("orderId") Long orderId) {
         return orderItemServices.findAll(orderId);
     }
 
@@ -27,12 +26,12 @@ public class OrderItemController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderItem> createOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItem orderItem) {
+    public ResponseEntity<OrderItemVO> createOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItemVO orderItem) {
         return orderItemServices.create(orderId, orderItem);
     }
 
     @PutMapping
-    public ResponseEntity<OrderItem> updateOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItem orderItem) {
+    public ResponseEntity<OrderItemVO> updateOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItemVO orderItem) {
         return orderItemServices.update(orderId, orderItem);
     }
 

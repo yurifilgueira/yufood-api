@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@JsonPropertyOrder(value = {"id", "quantity", "subtotal", "food"})
+@JsonPropertyOrder(value = {"key", "quantity", "subtotal", "food"})
 public class OrderItemVO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("id")
+    @JsonProperty("key")
     private Long key;
     private Integer quantity;
     private BigDecimal subtotal;

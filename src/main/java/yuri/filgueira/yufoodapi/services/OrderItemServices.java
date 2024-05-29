@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import yuri.filgueira.yufoodapi.data.vo.OrderVO;
 import yuri.filgueira.yufoodapi.entities.OrderItem;
 import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.OrderItemRepository;
@@ -12,6 +13,7 @@ import yuri.filgueira.yufoodapi.repositories.OrderRepository;
 import yuri.filgueira.yufoodapi.data.vo.OrderItemVO;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderItemServices {
@@ -24,50 +26,58 @@ public class OrderItemServices {
     @Autowired
     private MyModelMapper mapper;
 
-    public ResponseEntity<List<OrderItem>> findAll(Long orderId){
-        
+    public ResponseEntity<List<OrderItemVO>> findAll(Long orderId){
+
         var order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"));
-        
-        List<OrderItem> items = order.getOrderItems().stream().toList();
-        if(items.isEmpty()){
+
+        var orderItems = order.getOrderItems().stream().toList();
+
+        var orderItemsVO = mapper.convertList(orderItems, OrderItemVO.class);
+
+        if(orderItemsVO.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(items);
+        return ResponseEntity.ok(orderItemsVO);
     }
 
     public ResponseEntity<OrderItemVO> findById(Long orderId, Long orderItemId){
 
-        var orderItem = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"))
-                .getOrderItems().stream().filter(item -> item.getId().equals(orderItemId)).findFirst().orElseThrow(() -> new RuntimeException("Resource not found"));
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        var orderItem = order.getOrderItems().stream()
+                .filter(item -> Objects.equals(item.getId(), orderItemId)).findFirst().orElseThrow(() -> new RuntimeException("Resource not found"));
 
         var orderItemVO = mapper.convertValue(orderItem, OrderItemVO.class);
 
         return ResponseEntity.ok(orderItemVO);
     }
 
-    public ResponseEntity<OrderItem> create(Long orderId, OrderItem item){
+    public ResponseEntity<OrderItemVO> create(Long orderId, OrderItemVO orderItemVO){
 
         logger.info("Finding order");
         var order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        order.getOrderItems().add(item);
+        var entity = mapper.convertValue(orderItemVO, OrderItem.class);
+
+        order.getOrderItems().add(entity);
         orderRepository.save(order);
 
-        var orderItem = orderItemRepository.save(item);
-        orderItemRepository.save(orderItem);
+        var orderItem = orderItemRepository.save(entity);
 
-        return ResponseEntity.ok(orderItem);
+        var vo = mapper.convertValue(orderItem, OrderItemVO.class);
+        return ResponseEntity.ok(vo);
     }
 
-    public ResponseEntity<OrderItem> update(Long orderId, OrderItem orderItem){
+    public ResponseEntity<OrderItemVO> update(Long orderId, OrderItemVO orderItemVO){
 
         var order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        var entity = orderItemRepository.findById(orderItem.getId())
+        var entity = orderItemRepository.findById(orderItemVO.getKey())
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
 
+        var orderItem = mapper.convertValue(orderItemVO, OrderItem.class);
         entity.setFood(orderItem.getFood());
         entity.setQuantity(orderItem.getQuantity());
         entity.setSubtotal(orderItem.getSubtotal());
@@ -75,7 +85,9 @@ public class OrderItemServices {
         order.getOrderItems().add(entity);
         orderRepository.save(order);
 
-        return ResponseEntity.ok(orderItemRepository.save(entity));
+        var vo = mapper.convertValue(orderItemRepository.save(entity), OrderItemVO.class);
+
+        return ResponseEntity.ok(vo);
 
     }
 
