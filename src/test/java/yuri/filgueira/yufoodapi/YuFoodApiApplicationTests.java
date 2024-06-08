@@ -9,5 +9,4 @@ class YuFoodApiApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

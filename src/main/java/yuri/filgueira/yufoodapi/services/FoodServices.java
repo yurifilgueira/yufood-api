@@ -3,7 +3,9 @@ package yuri.filgueira.yufoodapi.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import yuri.filgueira.yufoodapi.data.vo.FoodVO;
 import yuri.filgueira.yufoodapi.entities.Food;
+import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.FoodRepository;
 import yuri.filgueira.yufoodapi.repositories.RestaurantRepository;
 
@@ -16,8 +18,10 @@ public class FoodServices {
     private RestaurantRepository restaurantRepository;
     @Autowired
     private FoodRepository foodRepository;
+    @Autowired
+    private MyModelMapper mapper;
 
-    public ResponseEntity<List<Food>> findAll(Long restaurantId){
+    public ResponseEntity<List<FoodVO>> findAll(Long restaurantId){
 
         var restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
@@ -28,27 +32,27 @@ public class FoodServices {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(items);
+        return ResponseEntity.ok(mapper.convertList(items, FoodVO.class));
     }
 
-    public ResponseEntity<Food> findById(Long restaurantId, Long foodId){
+    public ResponseEntity<FoodVO> findById(Long restaurantId, Long foodId){
         var entity = restaurantRepository.findById(restaurantId).orElseThrow(() -> new RuntimeException("Resource not found"))
                 .getFoods().stream().filter(food -> food.getId().equals(foodId)).findFirst().orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        return ResponseEntity.ok(entity);
+        return ResponseEntity.ok(mapper.convertValue(entity, FoodVO.class));
     }
 
-    public ResponseEntity<Food> create(Long restaurantId, Food food){
+    public ResponseEntity<FoodVO> create(Long restaurantId, Food food){
         var restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
 
         restaurant.getFoods().add(food);
         restaurantRepository.save(restaurant);
 
-        return ResponseEntity.ok(foodRepository.save(food));
+        return ResponseEntity.ok(mapper.convertValue(foodRepository.save(food), FoodVO.class));
     }
 
-    public ResponseEntity<Food> update(Long restaurantId, Food food){
+    public ResponseEntity<FoodVO> update(Long restaurantId, Food food){
 
         var restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
@@ -64,7 +68,7 @@ public class FoodServices {
         restaurant.getFoods().add(entity);
         restaurantRepository.save(restaurant);
 
-        return ResponseEntity.ok(foodRepository.save(entity));
+        return ResponseEntity.ok(mapper.convertValue(foodRepository.save(entity), FoodVO.class));
 
     }
 
