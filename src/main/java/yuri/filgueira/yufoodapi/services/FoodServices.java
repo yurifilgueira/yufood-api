@@ -42,28 +42,30 @@ public class FoodServices {
         return ResponseEntity.ok(mapper.convertValue(entity, FoodVO.class));
     }
 
-    public ResponseEntity<FoodVO> create(Long restaurantId, Food food){
+    public ResponseEntity<FoodVO> create(Long restaurantId, FoodVO foodVO){
         var restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        restaurant.getFoods().add(food);
+        var entity = mapper.convertValue(foodVO, Food.class);
+
+        restaurant.getFoods().add(entity);
         restaurantRepository.save(restaurant);
 
-        return ResponseEntity.ok(mapper.convertValue(foodRepository.save(food), FoodVO.class));
+        return ResponseEntity.ok(mapper.convertValue(foodRepository.save(entity), FoodVO.class));
     }
 
-    public ResponseEntity<FoodVO> update(Long restaurantId, Food food){
+    public ResponseEntity<FoodVO> update(Long restaurantId, FoodVO foodVO){
 
         var restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        var entity = foodRepository.findById(food.getId())
+        var entity = foodRepository.findById(foodVO.getKey())
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
         
         restaurant.getFoods().remove(entity);
         
-        entity.setName(food.getName());
-        entity.setPrice(food.getPrice());
+        entity.setName(foodVO.getName());
+        entity.setPrice(foodVO.getPrice());
         
         restaurant.getFoods().add(entity);
         restaurantRepository.save(restaurant);

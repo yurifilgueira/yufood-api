@@ -27,12 +27,12 @@ public class FoodController {
     }
 
     @PostMapping
-    public ResponseEntity<FoodVO> createOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody Food food) {
+    public ResponseEntity<FoodVO> createOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody FoodVO food) {
         return foodServices.create(restaurantId, food);
     }
 
     @PutMapping
-    public ResponseEntity<FoodVO> updateOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody Food food) {
+    public ResponseEntity<FoodVO> updateOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody FoodVO food) {
         return foodServices.update(restaurantId, food);
     }
 
