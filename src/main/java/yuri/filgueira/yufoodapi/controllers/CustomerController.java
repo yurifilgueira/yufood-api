@@ -3,7 +3,7 @@ package yuri.filgueira.yufoodapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuri.filgueira.yufoodapi.entities.Customer;
+import yuri.filgueira.yufoodapi.data.vo.CustomerVO;
 import yuri.filgueira.yufoodapi.services.CustomerServices;
 
 import java.util.List;
@@ -16,23 +16,23 @@ public class CustomerController {
     private CustomerServices services;
 
     @GetMapping
-    public ResponseEntity<List<Customer>> findAll() {
+    public ResponseEntity<List<CustomerVO>> findAll() {
         return services.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Customer> findById(@PathVariable Long id) {
+    public ResponseEntity<CustomerVO> findById(@PathVariable Long id) {
         return services.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
-        return services.create(customer);
+    public ResponseEntity<CustomerVO> create(@RequestBody CustomerVO customerVO) {
+        return services.create(customerVO);
     }
 
     @PutMapping
-    public ResponseEntity<Customer> update(@RequestBody Customer customer) {
-        return services.update(customer);
+    public ResponseEntity<CustomerVO> update(@RequestBody CustomerVO customerVO) {
+        return services.update(customerVO);
     }
 
     @DeleteMapping(value = "/{id}")

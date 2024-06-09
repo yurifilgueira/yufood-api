@@ -26,13 +26,13 @@ public class OrderItemController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderItemVO> createOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItemVO orderItem) {
-        return orderItemServices.create(orderId, orderItem);
+    public ResponseEntity<OrderItemVO> createOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItemVO orderItemVO) {
+        return orderItemServices.create(orderId, orderItemVO);
     }
 
     @PutMapping
-    public ResponseEntity<OrderItemVO> updateOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItemVO orderItem) {
-        return orderItemServices.update(orderId, orderItem);
+    public ResponseEntity<OrderItemVO> updateOrderItem(@PathVariable("orderId") Long orderId, @RequestBody OrderItemVO orderItemVO) {
+        return orderItemServices.update(orderId, orderItemVO);
     }
 
     @DeleteMapping(value = "/{orderItemId}")

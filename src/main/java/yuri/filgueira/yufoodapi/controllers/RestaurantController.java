@@ -27,20 +27,17 @@ public class RestaurantController {
     }
 
     @PostMapping
-    public ResponseEntity<RestaurantVO> create(@RequestBody RestaurantVO restaurant) {
-        return services.create(restaurant);
+    public ResponseEntity<RestaurantVO> create(@RequestBody RestaurantVO restaurantVO) {
+        return services.create(restaurantVO);
     }
 
     @PutMapping
-    public ResponseEntity<RestaurantVO> update(@RequestBody RestaurantVO restaurant) {
-        return services.update(restaurant);
+    public ResponseEntity<RestaurantVO> update(@RequestBody RestaurantVO restaurantVO) {
+        return services.update(restaurantVO);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         return services.delete(id);
     }
-
-
-
 }
