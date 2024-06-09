@@ -3,6 +3,7 @@ package yuri.filgueira.yufoodapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import yuri.filgueira.yufoodapi.data.vo.AddressVO;
 import yuri.filgueira.yufoodapi.entities.Address;
 import yuri.filgueira.yufoodapi.services.AddressServices;
 
@@ -16,23 +17,23 @@ public class AddressController {
     private AddressServices services;
 
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<List<Address>> findAll(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<AddressVO>> findAll(@PathVariable("userId") Long userId) {
         return services.findAll(userId);
     }
 
     @GetMapping(value = "/{userId}/{addressId}")
-    public ResponseEntity<Address> findById(@PathVariable("userId") Long userId, @PathVariable("addressId") Long addressId) {
+    public ResponseEntity<AddressVO> findById(@PathVariable("userId") Long userId, @PathVariable("addressId") Long addressId) {
         return services.findById(userId, addressId);
     }
 
     @PostMapping(value = "/{userId}")
-    public ResponseEntity<Address> create(@PathVariable("userId") Long userId, @RequestBody Address address) {
-        return services.create(userId, address);
+    public ResponseEntity<AddressVO> create(@PathVariable("userId") Long userId, @RequestBody AddressVO addressVO) {
+        return services.create(userId, addressVO);
     }
 
     @PutMapping(value = "/{userId}")
-    public ResponseEntity<Address> update(@PathVariable("userId") Long userId, @RequestBody Address address) {
-        return services.update(userId, address);
+    public ResponseEntity<AddressVO> update(@PathVariable("userId") Long userId, @RequestBody AddressVO addressVO) {
+        return services.update(userId, addressVO);
     }
 
     @DeleteMapping(value = "/{userId}/{addressId}")
