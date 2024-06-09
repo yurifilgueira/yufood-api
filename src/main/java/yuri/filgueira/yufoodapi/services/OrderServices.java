@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import yuri.filgueira.yufoodapi.data.vo.OrderVO;
 import yuri.filgueira.yufoodapi.entities.Order;
+import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.CustomerRepository;
 import yuri.filgueira.yufoodapi.repositories.OrderItemRepository;
 import yuri.filgueira.yufoodapi.repositories.OrderRepository;
@@ -24,54 +26,56 @@ public class OrderServices {
     @Autowired
     private RestaurantRepository restaurantRepository;
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private MyModelMapper mapper;
 
-    public ResponseEntity<List<Order>> findAll(){
-        List<Order> items = repository.findAll();
-        if(items.isEmpty()){
+    public ResponseEntity<List<OrderVO>> findAll(){
+        List<OrderVO> orderVOs = mapper.convertList(repository.findAll(), OrderVO.class);
+        if(orderVOs.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(items);
+        return ResponseEntity.ok(orderVOs);
     }
 
-    public ResponseEntity<Order> findById(Long id){
+    public ResponseEntity<OrderVO> findById(Long id){
         var order = repository.findById(id).orElseThrow(()-> new RuntimeException("Resource not found"));
 
-        return ResponseEntity.ok(order);
+        return ResponseEntity.ok(mapper.convertValue(order, OrderVO.class));
 
     }
 
-    public ResponseEntity<Order> create(Order item){
+    public ResponseEntity<OrderVO> create(OrderVO orderVO){
 
-        var customer = customerRepository.findById(item.getCustomer().getId())
+        var order = mapper.convertValue(orderVO, Order.class);
+        var customer = customerRepository.findById(order.getCustomer().getId())
                 .orElseThrow(()-> new RuntimeException("Resource not found"));
-        var restaurant = restaurantRepository.findById(item.getRestaurant().getId())
+        var restaurant = restaurantRepository.findById(order.getRestaurant().getId())
                 .orElseThrow(()-> new RuntimeException("Resource not found"));
 
-        item.setCustomer(customer);
-        item.setRestaurant(restaurant);
+        order.setCustomer(customer);
+        order.setRestaurant(restaurant);
 
-        customer.addOrder(item);
+        customer.addOrder(order);
         customerRepository.save(customer);
 
-        restaurant.addOrder(item);
+        restaurant.addOrder(order);
 
         restaurantRepository.save(restaurant);
 
-        var order = repository.save(item);
-
-        return ResponseEntity.ok(order);
+        return ResponseEntity.ok(mapper.convertValue(order, OrderVO.class));
     }
 
-    public ResponseEntity<Order> update(Order order){
+    public ResponseEntity<OrderVO> update(OrderVO orderVO){
 
+        var order = mapper.convertValue(orderVO, Order.class);
         var entity = repository.findById(order.getId()).orElseThrow(()-> new RuntimeException("Resource not found"));
 
+        entity.setRestaurant(order.getRestaurant());
+        entity.setCustomer(order.getCustomer());
         entity.setOrderItems(order.getOrderItems());
         entity.setTotal(order.getTotal());
 
-        return ResponseEntity.ok(repository.save(entity));
+        return ResponseEntity.ok(mapper.convertValue(repository.save(entity), OrderVO.class));
 
     }
 

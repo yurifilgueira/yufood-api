@@ -3,10 +3,11 @@ package yuri.filgueira.yufoodapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuri.filgueira.yufoodapi.entities.Order;
+import yuri.filgueira.yufoodapi.data.vo.OrderVO;
 import yuri.filgueira.yufoodapi.services.OrderServices;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "v1/api/orders")
@@ -16,23 +17,23 @@ public class OrderController {
     private OrderServices orderServices;
 
     @GetMapping
-    public ResponseEntity<List<Order>> findAll(Long orderId) {
+    public ResponseEntity<List<OrderVO>> findAll(Long orderId) {
         return orderServices.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Order> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<OrderVO> findById(@PathVariable("id") Long id) {
         return orderServices.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Order> create(@RequestBody Order order) {
-        return this.orderServices.create(order);
+    public ResponseEntity<OrderVO> create(@RequestBody OrderVO orderVO) {
+        return this.orderServices.create(orderVO);
     }
 
     @PutMapping
-    public ResponseEntity<Order> update(@RequestBody Order order) {
-        return this.orderServices.update(order);
+    public ResponseEntity<OrderVO> update(@RequestBody OrderVO orderVO) {
+        return this.orderServices.update(orderVO);
     }
 
     @DeleteMapping
