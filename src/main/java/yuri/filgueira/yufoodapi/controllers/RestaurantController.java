@@ -3,6 +3,7 @@ package yuri.filgueira.yufoodapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import yuri.filgueira.yufoodapi.data.vo.RestaurantVO;
 import yuri.filgueira.yufoodapi.entities.Restaurant;
 import yuri.filgueira.yufoodapi.services.RestaurantServices;
 
@@ -16,22 +17,22 @@ public class RestaurantController {
     private RestaurantServices services;
 
     @GetMapping
-    public ResponseEntity<List<Restaurant>> findAll() {
+    public ResponseEntity<List<RestaurantVO>> findAll() {
         return services.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Restaurant> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<RestaurantVO> findById(@PathVariable("id") Long id) {
         return services.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<RestaurantVO> create(@RequestBody RestaurantVO restaurant) {
         return services.create(restaurant);
     }
 
     @PutMapping
-    public ResponseEntity<Restaurant> update(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<RestaurantVO> update(@RequestBody RestaurantVO restaurant) {
         return services.update(restaurant);
     }
 
