@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.data.vo.CustomerVO;
 import yuri.filgueira.yufoodapi.entities.Customer;
+import yuri.filgueira.yufoodapi.exceptions.ResourceNotFoundException;
 import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.CustomerRepository;
 
@@ -31,7 +32,7 @@ public class CustomerServices {
     }
 
     public ResponseEntity<CustomerVO> findById(Long id){
-        var customer = repository.findById(id).orElseThrow(()-> new RuntimeException("Resource not found"));
+        var customer = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         return ResponseEntity.ok(mapper.convertValue(customer, CustomerVO.class));
 
@@ -49,7 +50,7 @@ public class CustomerServices {
     public ResponseEntity<CustomerVO> update(CustomerVO customerVO){
 
         var customer = mapper.convertValue(customerVO, Customer.class);
-        var entity = repository.findById(customer.getId()).orElseThrow(()-> new RuntimeException("Resource not found"));
+        var entity = repository.findById(customer.getId()).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         entity.setEmail(customer.getEmail());
         entity.setName(customer.getName());

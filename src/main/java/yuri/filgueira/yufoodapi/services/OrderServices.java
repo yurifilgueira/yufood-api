@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.data.vo.OrderVO;
 import yuri.filgueira.yufoodapi.entities.Order;
+import yuri.filgueira.yufoodapi.exceptions.ResourceNotFoundException;
 import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.CustomerRepository;
 import yuri.filgueira.yufoodapi.repositories.OrderItemRepository;
@@ -38,7 +39,7 @@ public class OrderServices {
     }
 
     public ResponseEntity<OrderVO> findById(Long id){
-        var order = repository.findById(id).orElseThrow(()-> new RuntimeException("Resource not found"));
+        var order = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         return ResponseEntity.ok(mapper.convertValue(order, OrderVO.class));
 
@@ -48,9 +49,9 @@ public class OrderServices {
 
         var order = mapper.convertValue(orderVO, Order.class);
         var customer = customerRepository.findById(order.getCustomer().getId())
-                .orElseThrow(()-> new RuntimeException("Resource not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
         var restaurant = restaurantRepository.findById(order.getRestaurant().getId())
-                .orElseThrow(()-> new RuntimeException("Resource not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         order.setCustomer(customer);
         order.setRestaurant(restaurant);
@@ -68,7 +69,7 @@ public class OrderServices {
     public ResponseEntity<OrderVO> update(OrderVO orderVO){
 
         var order = mapper.convertValue(orderVO, Order.class);
-        var entity = repository.findById(order.getId()).orElseThrow(()-> new RuntimeException("Resource not found"));
+        var entity = repository.findById(order.getId()).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         entity.setRestaurant(order.getRestaurant());
         entity.setCustomer(order.getCustomer());
@@ -81,7 +82,7 @@ public class OrderServices {
 
     public ResponseEntity<Void> delete(Long id){
 
-        var order = repository.findById(id).orElseThrow(()-> new RuntimeException("Resource not found"));
+        var order = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         var restaurant = order.getRestaurant();
         restaurant.removeOrder(order);

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yuri.filgueira.yufoodapi.data.vo.AddressVO;
 import yuri.filgueira.yufoodapi.entities.Address;
+import yuri.filgueira.yufoodapi.exceptions.ResourceNotFoundException;
 import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.AddressRepository;
 
@@ -28,7 +29,7 @@ public class AddressServices {
     }
 
     public ResponseEntity<AddressVO> findById(Long userId, Long addressId){
-        var address = addressRepository.findById(addressId).orElseThrow(()-> new RuntimeException("Resource not found"));
+        var address = addressRepository.findById(addressId).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
         return ResponseEntity.ok(mapper.convertValue(address, AddressVO.class));
     }
 
@@ -41,7 +42,7 @@ public class AddressServices {
     public ResponseEntity<AddressVO> update(Long userId, AddressVO addressVO){
 
         var address = mapper.convertValue(addressVO, Address.class);
-        var entity = addressRepository.findById(address.getId()).orElseThrow(()-> new RuntimeException("Resource not found"));
+        var entity = addressRepository.findById(address.getId()).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         entity.setCity(address.getCity());
         entity.setState(address.getState());
