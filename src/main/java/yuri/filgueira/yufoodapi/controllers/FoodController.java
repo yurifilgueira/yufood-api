@@ -17,22 +17,22 @@ public class FoodController {
     FoodServices foodServices;
 
     @GetMapping
-    public ResponseEntity<List<FoodVO>> findAllOrderItems(@PathVariable("restaurantId") Long restaurantId) {
+    public ResponseEntity<List<FoodVO>> findAllFoods(@PathVariable("restaurantId") Long restaurantId) {
         return foodServices.findAll(restaurantId);
     }
 
     @GetMapping(value = "/{foodId}")
-    public ResponseEntity<FoodVO> findOrderItemById(@PathVariable("restaurantId") Long restaurantId, @PathVariable("foodId") Long foodId) {
+    public ResponseEntity<FoodVO> findFoodById(@PathVariable("restaurantId") Long restaurantId, @PathVariable("foodId") Long foodId) {
         return foodServices.findById(restaurantId, foodId);
     }
 
     @PostMapping
-    public ResponseEntity<FoodVO> createOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody FoodVO foodVO) {
+    public ResponseEntity<FoodVO> createFood(@PathVariable("restaurantId") Long restaurantId, @RequestBody FoodVO foodVO) {
         return foodServices.create(restaurantId, foodVO);
     }
 
     @PutMapping
-    public ResponseEntity<FoodVO> updateOrderItem(@PathVariable("restaurantId") Long restaurantId, @RequestBody FoodVO foodVO) {
+    public ResponseEntity<FoodVO> updateFood(@PathVariable("restaurantId") Long restaurantId, @RequestBody FoodVO foodVO) {
         return foodServices.update(restaurantId, foodVO);
     }
 

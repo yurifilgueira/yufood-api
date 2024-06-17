@@ -1,14 +1,16 @@
 package yuri.filgueira.yufoodapi.data.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
-
-public class FoodVO implements Serializable {
+@JsonPropertyOrder(value = {"id", "name", "price"})
+public class FoodVO extends RepresentationModel<FoodVO>  implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

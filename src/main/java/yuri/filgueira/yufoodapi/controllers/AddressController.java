@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import yuri.filgueira.yufoodapi.data.vo.AddressVO;
-import yuri.filgueira.yufoodapi.entities.Address;
 import yuri.filgueira.yufoodapi.services.AddressServices;
 
 import java.util.List;

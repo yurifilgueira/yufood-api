@@ -4,7 +4,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class AddressVO implements Serializable {
+public class AddressVO implements Serializable  {
 
     @Serial
     private static final long serialVersionUID = 1L;
