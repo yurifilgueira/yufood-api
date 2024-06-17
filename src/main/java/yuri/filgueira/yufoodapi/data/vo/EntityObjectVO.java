@@ -1,12 +1,14 @@
 package yuri.filgueira.yufoodapi.data.vo;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class EntityObjectVO implements Serializable {
+public abstract class EntityObjectVO extends RepresentationModel<EntityObjectVO> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

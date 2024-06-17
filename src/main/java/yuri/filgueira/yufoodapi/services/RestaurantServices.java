@@ -3,6 +3,8 @@ package yuri.filgueira.yufoodapi.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import yuri.filgueira.yufoodapi.controllers.OrderController;
+import yuri.filgueira.yufoodapi.controllers.RestaurantController;
 import yuri.filgueira.yufoodapi.data.vo.RestaurantVO;
 import yuri.filgueira.yufoodapi.entities.Restaurant;
 import yuri.filgueira.yufoodapi.exceptions.ResourceNotFoundException;
@@ -10,6 +12,9 @@ import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
 import yuri.filgueira.yufoodapi.repositories.RestaurantRepository;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class RestaurantServices {
@@ -21,9 +26,15 @@ public class RestaurantServices {
 
     public ResponseEntity<List<RestaurantVO>> findAll(){
         List<RestaurantVO> restaurantVOs = mapper.convertList(repository.findAll(), RestaurantVO.class);
+
         if(restaurantVOs.isEmpty()){
             return ResponseEntity.notFound().build();
         }
+
+       restaurantVOs.forEach(restaurantVO -> {
+           restaurantVO.add(linkTo(methodOn(RestaurantController.class).findById(restaurantVO.getKey())).withSelfRel());
+
+       });
 
         return ResponseEntity.ok(restaurantVOs);
     }
@@ -32,15 +43,20 @@ public class RestaurantServices {
         var entity = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
         var restaurantVO = mapper.convertValue(entity, RestaurantVO.class);
 
+        restaurantVO.add(linkTo(methodOn(RestaurantController.class).findById(restaurantVO.getKey())).withSelfRel());
         return ResponseEntity.ok(restaurantVO);
 
     }
 
-    public ResponseEntity<RestaurantVO> create(RestaurantVO restaurantVO){
+    public ResponseEntity<RestaurantVO> create(RestaurantVO restaurantVO) {
 
         var entity = mapper.convertValue(restaurantVO, Restaurant.class);
 
-        return ResponseEntity.ok(mapper.convertValue(repository.save(entity), RestaurantVO.class));
+        var vo = mapper.convertValue(repository.save(entity), RestaurantVO.class);
+
+        vo.add(linkTo(methodOn(RestaurantController.class).create(restaurantVO)).withSelfRel());
+
+        return ResponseEntity.ok(vo);
     }
 
     public ResponseEntity<RestaurantVO> update(RestaurantVO restaurantVO){
@@ -58,7 +74,10 @@ public class RestaurantServices {
         entity.getAddresses().clear();
         entity.getAddresses().addAll(restaurant.getAddresses());
 
-        return ResponseEntity.ok(mapper.convertValue(repository.save(entity), RestaurantVO.class));
+       var vo = mapper.convertValue(repository.save(entity), RestaurantVO.class);
+       vo.add(linkTo(methodOn(RestaurantController.class).update(restaurantVO)).withSelfRel());
+
+        return ResponseEntity.ok(vo);
     }
 
     public ResponseEntity<Void> delete(Long id){
