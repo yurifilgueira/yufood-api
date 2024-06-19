@@ -8,7 +8,6 @@ import yuri.filgueira.yufoodapi.services.OrderServices;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping(value = "v1/api/orders")
 public class OrderController {
@@ -17,7 +16,7 @@ public class OrderController {
     private OrderServices orderServices;
 
     @GetMapping
-    public ResponseEntity<List<OrderVO>> findAll(Long orderId) {
+    public ResponseEntity<List<OrderVO>> findAll() {
         return orderServices.findAll();
     }
 

@@ -16,6 +16,7 @@ public class RestaurantVO extends EntityObjectVO implements Serializable {
 
     @JsonIgnore
     private Set<FoodVO> foods = new HashSet<>();
+    @JsonIgnore
     private Set<OrderVO> orders = new HashSet<>();
 
     public RestaurantVO() {

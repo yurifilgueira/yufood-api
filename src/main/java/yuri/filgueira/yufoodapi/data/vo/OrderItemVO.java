@@ -1,7 +1,9 @@
 package yuri.filgueira.yufoodapi.data.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -9,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @JsonPropertyOrder(value = {"key", "quantity", "subtotal", "food"})
-public class OrderItemVO implements Serializable {
+public class OrderItemVO extends RepresentationModel<OrderItemVO> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -19,6 +21,7 @@ public class OrderItemVO implements Serializable {
     private Integer quantity;
     private BigDecimal subtotal;
 
+    @JsonIgnore
     private FoodVO food;
 
     public OrderItemVO() {

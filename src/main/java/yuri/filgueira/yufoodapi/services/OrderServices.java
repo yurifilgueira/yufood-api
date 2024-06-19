@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import yuri.filgueira.yufoodapi.controllers.CustomerController;
+import yuri.filgueira.yufoodapi.controllers.OrderController;
+import yuri.filgueira.yufoodapi.controllers.RestaurantController;
 import yuri.filgueira.yufoodapi.data.vo.OrderVO;
 import yuri.filgueira.yufoodapi.entities.Order;
 import yuri.filgueira.yufoodapi.exceptions.ResourceNotFoundException;
@@ -15,6 +18,9 @@ import yuri.filgueira.yufoodapi.repositories.OrderRepository;
 import yuri.filgueira.yufoodapi.repositories.RestaurantRepository;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class OrderServices {
@@ -35,14 +41,31 @@ public class OrderServices {
             return ResponseEntity.notFound().build();
         }
 
+        orderVOs.forEach(orderVO -> {
+            orderVO.add(linkTo(methodOn(OrderController.class)
+                    .findById(orderVO.getKey())).withSelfRel());
+            orderVO.add(linkTo(methodOn(CustomerController.class)
+                    .findById(orderVO.getCustomer().getKey())).withRel("Customer"));
+            orderVO.add(linkTo(methodOn(RestaurantController.class)
+                    .findById(orderVO.getRestaurant().getKey())).withRel("Restaurant"));
+        });
+
         return ResponseEntity.ok(orderVOs);
     }
 
-    public ResponseEntity<OrderVO> findById(Long id){
-        var order = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
+    public ResponseEntity<OrderVO> findById(Long orderId){
+        var order = repository.findById(orderId).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
-        return ResponseEntity.ok(mapper.convertValue(order, OrderVO.class));
+        var orderVO = mapper.convertValue(order, OrderVO.class);
 
+        orderVO.add(linkTo(methodOn(OrderController.class)
+                .findAll()).withRel("All Orders"));
+        orderVO.add(linkTo(methodOn(CustomerController.class)
+                .findById(orderVO.getCustomer().getKey())).withRel("Customer"));
+        orderVO.add(linkTo(methodOn(RestaurantController.class)
+                .findById(orderVO.getRestaurant().getKey())).withRel("Restaurant"));
+
+        return ResponseEntity.ok(orderVO);
     }
 
     public ResponseEntity<OrderVO> create(OrderVO orderVO){
@@ -63,6 +86,13 @@ public class OrderServices {
 
         restaurantRepository.save(restaurant);
 
+        orderVO.add(linkTo(methodOn(OrderController.class)
+                .findById(orderVO.getKey())).withSelfRel());
+        orderVO.add(linkTo(methodOn(CustomerController.class)
+                .findById(orderVO.getCustomer().getKey())).withRel("Customer"));
+        orderVO.add(linkTo(methodOn(RestaurantController.class)
+                .findById(orderVO.getRestaurant().getKey())).withRel("Restaurant"));
+
         return ResponseEntity.ok(mapper.convertValue(order, OrderVO.class));
     }
 
@@ -76,7 +106,16 @@ public class OrderServices {
         entity.setOrderItems(order.getOrderItems());
         entity.setTotal(order.getTotal());
 
-        return ResponseEntity.ok(mapper.convertValue(repository.save(entity), OrderVO.class));
+        var vo = mapper.convertValue(repository.save(entity), OrderVO.class);
+
+        vo.add(linkTo(methodOn(OrderController.class)
+                .findById(orderVO.getKey())).withSelfRel());
+        vo.add(linkTo(methodOn(CustomerController.class)
+                .findById(orderVO.getCustomer().getKey())).withRel("Customer"));
+        vo.add(linkTo(methodOn(RestaurantController.class)
+                .findById(orderVO.getRestaurant().getKey())).withRel("Restaurant"));
+
+        return ResponseEntity.ok(vo);
 
     }
 
@@ -96,5 +135,4 @@ public class OrderServices {
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
 }
