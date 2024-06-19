@@ -1,5 +1,7 @@
 package yuri.filgueira.yufoodapi.data.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -12,6 +14,7 @@ public class RestaurantVO extends EntityObjectVO implements Serializable {
 
     private String cnpj;
 
+    @JsonIgnore
     private Set<FoodVO> foods = new HashSet<>();
     private Set<OrderVO> orders = new HashSet<>();
 

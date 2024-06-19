@@ -3,6 +3,7 @@ package yuri.filgueira.yufoodapi.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import yuri.filgueira.yufoodapi.controllers.FoodController;
 import yuri.filgueira.yufoodapi.controllers.OrderController;
 import yuri.filgueira.yufoodapi.controllers.RestaurantController;
 import yuri.filgueira.yufoodapi.data.vo.RestaurantVO;
@@ -33,7 +34,7 @@ public class RestaurantServices {
 
        restaurantVOs.forEach(restaurantVO -> {
            restaurantVO.add(linkTo(methodOn(RestaurantController.class).findById(restaurantVO.getKey())).withSelfRel());
-
+           restaurantVO.add(linkTo(methodOn(FoodController.class).findAllFoods(restaurantVO.getKey())).withRel("Foods"));
        });
 
         return ResponseEntity.ok(restaurantVOs);
@@ -43,7 +44,9 @@ public class RestaurantServices {
         var entity = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
         var restaurantVO = mapper.convertValue(entity, RestaurantVO.class);
 
-        restaurantVO.add(linkTo(methodOn(RestaurantController.class).findById(restaurantVO.getKey())).withSelfRel());
+        restaurantVO.add(linkTo(methodOn(RestaurantController.class).findAll()).withRel("All Restaurants"));
+        restaurantVO.add(linkTo(methodOn(FoodController.class).findAllFoods(restaurantVO.getKey())).withRel("Foods"));
+
         return ResponseEntity.ok(restaurantVO);
 
     }
@@ -55,6 +58,7 @@ public class RestaurantServices {
         var vo = mapper.convertValue(repository.save(entity), RestaurantVO.class);
 
         vo.add(linkTo(methodOn(RestaurantController.class).create(restaurantVO)).withSelfRel());
+        vo.add(linkTo(methodOn(FoodController.class).findAllFoods(restaurantVO.getKey())).withRel("Foods"));
 
         return ResponseEntity.ok(vo);
     }
@@ -76,6 +80,7 @@ public class RestaurantServices {
 
        var vo = mapper.convertValue(repository.save(entity), RestaurantVO.class);
        vo.add(linkTo(methodOn(RestaurantController.class).update(restaurantVO)).withSelfRel());
+       vo.add(linkTo(methodOn(FoodController.class).findAllFoods(restaurantVO.getKey())).withRel("Foods"));
 
         return ResponseEntity.ok(vo);
     }

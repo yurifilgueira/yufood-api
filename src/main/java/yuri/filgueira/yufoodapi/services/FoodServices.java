@@ -37,7 +37,11 @@ public class FoodServices {
         }
 
         var foodVOs = mapper.convertList(items, FoodVO.class);
-        foodVOs.forEach(food -> food.add(linkTo(methodOn(FoodController.class).findFoodById(restaurantId, food.getKey())).withSelfRel()));
+        foodVOs.forEach(food ->
+                food.add(linkTo(methodOn(FoodController.class)
+                        .findFoodById(restaurantId, food.getKey())).withSelfRel()
+                )
+        );
 
         return ResponseEntity.ok(foodVOs);
     }
