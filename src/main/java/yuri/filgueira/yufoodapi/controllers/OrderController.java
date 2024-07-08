@@ -9,20 +9,20 @@ import yuri.filgueira.yufoodapi.services.OrderServices;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "v1/api/orders")
+@RequestMapping(value = "v1/api/{userId}/orders")
 public class OrderController {
 
     @Autowired
     private OrderServices orderServices;
 
     @GetMapping
-    public ResponseEntity<List<OrderVO>> findAll() {
-        return orderServices.findAll();
+    public ResponseEntity<List<OrderVO>> findAll(@PathVariable("userId") Long userId) {
+        return orderServices.findAll(userId);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<OrderVO> findById(@PathVariable("id") Long id) {
-        return orderServices.findById(id);
+    @GetMapping(value = "/{orderId}")
+    public ResponseEntity<OrderVO> findById(@PathVariable("orderId") Long orderId) {
+        return orderServices.findById(orderId);
     }
 
     @PostMapping

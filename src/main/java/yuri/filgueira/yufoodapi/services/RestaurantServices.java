@@ -35,7 +35,7 @@ public class RestaurantServices {
        restaurantVOs.forEach(restaurantVO -> {
            restaurantVO.add(linkTo(methodOn(RestaurantController.class).findById(restaurantVO.getKey())).withSelfRel());
            restaurantVO.add(linkTo(methodOn(FoodController.class).findAllFoods(restaurantVO.getKey())).withRel("Foods"));
-           restaurantVO.add(linkTo(methodOn(OrderController.class).findAll()).withRel("Orders"));
+           restaurantVO.add(linkTo(methodOn(OrderController.class).findAll(restaurantVO.getKey())).withRel("Orders"));
        });
 
         return ResponseEntity.ok(restaurantVOs);

@@ -9,14 +9,14 @@ import yuri.filgueira.yufoodapi.controllers.CustomerController;
 import yuri.filgueira.yufoodapi.controllers.OrderController;
 import yuri.filgueira.yufoodapi.controllers.RestaurantController;
 import yuri.filgueira.yufoodapi.data.vo.OrderVO;
+import yuri.filgueira.yufoodapi.entities.Customer;
 import yuri.filgueira.yufoodapi.entities.Order;
+import yuri.filgueira.yufoodapi.entities.Restaurant;
 import yuri.filgueira.yufoodapi.exceptions.ResourceNotFoundException;
 import yuri.filgueira.yufoodapi.mapper.modelMapper.MyModelMapper;
-import yuri.filgueira.yufoodapi.repositories.CustomerRepository;
-import yuri.filgueira.yufoodapi.repositories.OrderItemRepository;
-import yuri.filgueira.yufoodapi.repositories.OrderRepository;
-import yuri.filgueira.yufoodapi.repositories.RestaurantRepository;
+import yuri.filgueira.yufoodapi.repositories.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -27,7 +27,7 @@ public class OrderServices {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServices.class);
     @Autowired
-    private OrderRepository repository;
+    private OrderRepository orderRepository;
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
@@ -35,8 +35,12 @@ public class OrderServices {
     @Autowired
     private MyModelMapper mapper;
 
-    public ResponseEntity<List<OrderVO>> findAll(){
-        List<OrderVO> orderVOs = mapper.convertList(repository.findAll(), OrderVO.class);
+    public ResponseEntity<List<OrderVO>> findAll(long userId){
+
+        //TODO
+
+        /*
+        List<OrderVO> orderVOs = mapper.convertList(, OrderVO.class);
         if(orderVOs.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -49,17 +53,15 @@ public class OrderServices {
             orderVO.add(linkTo(methodOn(RestaurantController.class)
                     .findById(orderVO.getRestaurant().getKey())).withRel("Restaurant"));
         });
+         */
 
-        return ResponseEntity.ok(orderVOs);
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
-    public ResponseEntity<OrderVO> findById(Long orderId){
-        var order = repository.findById(orderId).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
+    public ResponseEntity<OrderVO> findById(long orderId){
+        var order = orderRepository.findById(orderId).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         var orderVO = mapper.convertValue(order, OrderVO.class);
-
-        orderVO.add(linkTo(methodOn(OrderController.class)
-                .findAll()).withRel("All Orders"));
         orderVO.add(linkTo(methodOn(CustomerController.class)
                 .findById(orderVO.getCustomer().getKey())).withRel("Customer"));
         orderVO.add(linkTo(methodOn(RestaurantController.class)
@@ -99,14 +101,14 @@ public class OrderServices {
     public ResponseEntity<OrderVO> update(OrderVO orderVO){
 
         var order = mapper.convertValue(orderVO, Order.class);
-        var entity = repository.findById(order.getId()).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
+        var entity = orderRepository.findById(order.getId()).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         entity.setRestaurant(order.getRestaurant());
         entity.setCustomer(order.getCustomer());
         entity.setOrderItems(order.getOrderItems());
         entity.setTotal(order.getTotal());
 
-        var vo = mapper.convertValue(repository.save(entity), OrderVO.class);
+        var vo = mapper.convertValue(orderRepository.save(entity), OrderVO.class);
 
         vo.add(linkTo(methodOn(OrderController.class)
                 .findById(orderVO.getKey())).withSelfRel());
@@ -121,7 +123,7 @@ public class OrderServices {
 
     public ResponseEntity<Void> delete(Long id){
 
-        var order = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
+        var order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
 
         var restaurant = order.getRestaurant();
         restaurant.removeOrder(order);
@@ -132,7 +134,7 @@ public class OrderServices {
 
         customerRepository.save(customer);
 
-        repository.deleteById(id);
+        orderRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
